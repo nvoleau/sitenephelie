@@ -1,0 +1,25 @@
+# deps
+/node_modules
+
+# next
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# env
+.env*.local
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# sitemap (généré au build)
+/public/sitemap*.xml
+/public/robots.txt

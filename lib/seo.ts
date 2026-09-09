@@ -1,0 +1,28 @@
+import type { Metadata } from "next";
+import { siteConfig } from "@/lib/site-config";
+
+type PageSeoInput = {
+  title: string;
+  description: string;
+  path: string; // ex: "/a-propos/"
+};
+
+// Chaque page indexable doit avoir un title + H1 localisés (Puy du Fou / Vendée /
+// Les Epesses) — exigence non négociable de l'audit du 9 septembre 2026 (CLAUDE.md).
+// Ce helper centralise title/description/canonical pour éviter les oublis.
+export function buildPageMetadata({ title, description, path }: PageSeoInput): Metadata {
+  const url = `${siteConfig.url}${path}`;
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: siteConfig.name,
+      locale: "fr_FR",
+      type: "website",
+    },
+  };
+}

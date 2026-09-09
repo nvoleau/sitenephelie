@@ -1,0 +1,122 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+import ReviewsSection from "@/components/ReviewsSection";
+import GiteCard from "@/components/GiteCard";
+import MdxContent from "@/components/MdxContent";
+import { gites } from "@/lib/data/gites";
+import { services } from "@/lib/data/services";
+import { usp } from "@/lib/data/usp";
+import { getMdxSource } from "@/lib/mdx";
+import { buildPageMetadata } from "@/lib/seo";
+import { addressLine, siteConfig } from "@/lib/site-config";
+
+const { frontmatter, content } = getMdxSource("accueil");
+
+export const metadata: Metadata = buildPageMetadata({
+  title: frontmatter.title,
+  description: frontmatter.metaDescription,
+  path: "/",
+});
+
+export default function HomePage() {
+  return (
+    <>
+      {/* Hero — reprend le texte exact de l'ancien accueil. Le bouton "Commander"
+          d'origine est retiré pour cette version (boutique hors périmètre, voir
+          CLAUDE.md) afin de ne créer aucun lien mort. */}
+      <section className="bg-forest-700 py-20 text-white">
+        <div className="container-page">
+          <p className="eyebrow text-terracotta-200">Bienvenue</p>
+          <h1 className="h1 mt-2 text-white">{frontmatter.h1}</h1>
+          <p className="mt-4 max-w-2xl text-lg text-forest-50">
+            Gîtes 4 – 6 – 8 personnes à 2 minutes du Puy du Fou.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link href="/reserver-un-logement/" className="btn-secondary">
+              Réserver
+            </Link>
+            <a href={siteConfig.whatsappHref} target="_blank" rel="noopener noreferrer" className="btn-outline border-white text-white hover:bg-forest-600">
+              Discuter sur WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <ReviewsSection />
+
+      <section className="py-16">
+        <div className="container-page text-center">
+          <h2 className="h2">4 gîtes de 2 à 8 personnes</h2>
+          <p className="mt-2 text-vendee-600">
+            Livraison des commandes directement dans les gîtes.
+          </p>
+        </div>
+        <div className="container-page mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {gites.map((gite) => (
+            <GiteCard key={gite.slug} gite={gite} />
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-vendee-50 py-16">
+        <div className="container-page">
+          <p className="eyebrow">Le meilleur de la Vendée</p>
+          <h2 className="h2 mt-2">Nos services</h2>
+          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            {services.map((service) => (
+              <div key={service.title} className="rounded-lg bg-white p-6 shadow-sm">
+                <h3 className="font-display text-lg font-semibold text-forest-700">
+                  {service.title}
+                </h3>
+                <p className="mt-2 text-sm text-vendee-700">{service.text}</p>
+              </div>
+            ))}
+          </div>
+          <Link href="/services/" className="btn-outline mt-8 inline-flex">
+            En savoir plus
+          </Link>
+        </div>
+      </section>
+
+      <section className="py-16">
+        <div className="container-page grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {usp.map((item) => (
+            <div key={item.title}>
+              <h3 className="font-display text-lg font-semibold text-forest-700">{item.title}</h3>
+              <p className="mt-2 text-sm text-vendee-700">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-forest-800 py-16 text-white">
+        <div className="container-page">
+          <p className="eyebrow text-terracotta-200">La Vendée</p>
+          <h2 className="h2 mt-2 text-white">Notre territoire à découvrir</h2>
+          <div className="mt-4 max-w-2xl text-forest-50 [&_p]:text-forest-50">
+            <MdxContent source={content} />
+          </div>
+          <Link href="/decouvrir-la-region/" className="btn-secondary mt-8 inline-flex">
+            Découvrir la région
+          </Link>
+        </div>
+      </section>
+
+      <section id="contact" className="py-16">
+        <div className="container-page">
+          <p className="eyebrow">Contact</p>
+          <h2 className="h2 mt-2">Contactez-nous</h2>
+          <address className="mt-4 space-y-2 text-vendee-800 not-italic">
+            <p>{addressLine}</p>
+            <p>
+              <a href={`tel:${siteConfig.phoneHref}`} className="hover:text-forest-700">{siteConfig.phone}</a>
+            </p>
+            <p>
+              <a href={`mailto:${siteConfig.email}`} className="hover:text-forest-700">{siteConfig.email}</a>
+            </p>
+          </address>
+        </div>
+      </section>
+    </>
+  );
+}
