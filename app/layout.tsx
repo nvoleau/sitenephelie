@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: { default: siteConfig.name, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
+  // Vérification de propriété Google Search Console (ajoutée le 10/09/2026, en
+  // amont de la bascule DNS, pour permettre à Nicolas de vérifier le domaine
+  // par cette méthode en plus de l'enregistrement DNS TXT chez IONOS.
+  verification: { google: "K3dR08acsrYKGBJ4REDYKrV8UTPXvwVAvHX5Nc3dZAo" },
 };
 
 const lodgingBusinessJsonLd = {
