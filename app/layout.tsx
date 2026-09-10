@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import { galleryPhotos } from "@/lib/data/site-images";
 import { siteConfig } from "@/lib/site-config";
 
 // Polices auto-hébergées via next/font (traite le point d'audit "chargement des
@@ -25,6 +26,7 @@ const lodgingBusinessJsonLd = {
   url: siteConfig.url,
   telephone: siteConfig.phoneHref,
   email: siteConfig.email,
+  image: `${siteConfig.url}${galleryPhotos[0].src}`,
   address: {
     "@type": "PostalAddress",
     streetAddress: siteConfig.address.street,

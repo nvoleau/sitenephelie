@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import GitePlaceholderImage from "@/components/GitePlaceholderImage";
 import { getGiteBySlug, gites, servicesInclusTousLesGites } from "@/lib/data/gites";
 import { buildPageMetadata } from "@/lib/seo";
 import { addressLine } from "@/lib/site-config";
+import { giteCardImage } from "@/lib/data/site-images";
 
 export function generateStaticParams() {
   return gites.map((gite) => ({ slug: gite.slug }));
@@ -35,6 +36,8 @@ export default async function GitePage({
   const gite = getGiteBySlug(slug);
   if (!gite) notFound();
 
+  const image = giteCardImage[gite.slug];
+
   return (
     <div className="container-page py-16">
       <Link href="/nos-gites/" className="text-sm font-semibold text-forest-700 hover:underline">
@@ -42,7 +45,17 @@ export default async function GitePage({
       </Link>
 
       <div className="mt-6 grid gap-10 lg:grid-cols-2">
-        <GitePlaceholderImage label={gite.name} />
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-vendee-100">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            width={image.width}
+            height={image.height}
+            className="h-full w-full object-cover"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            priority
+          />
+        </div>
 
         <div>
           <h1 className="h1">

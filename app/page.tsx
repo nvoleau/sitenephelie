@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -6,6 +7,7 @@ import MdxContent from "@/components/MdxContent";
 import { gites } from "@/lib/data/gites";
 import { services } from "@/lib/data/services";
 import { usp } from "@/lib/data/usp";
+import { galleryPhotos } from "@/lib/data/site-images";
 import { getMdxSource } from "@/lib/mdx";
 import { buildPageMetadata } from "@/lib/seo";
 import { addressLine, siteConfig } from "@/lib/site-config";
@@ -23,9 +25,19 @@ export default function HomePage() {
     <>
       {/* Hero — reprend le texte exact de l'ancien accueil. Le bouton "Commander"
           d'origine est retiré pour cette version (boutique hors périmètre, voir
-          CLAUDE.md) afin de ne créer aucun lien mort. */}
-      <section className="bg-forest-700 py-20 text-white">
-        <div className="container-page">
+          CLAUDE.md) afin de ne créer aucun lien mort. Photo réelle récupérée sur
+          l'ancien site (og:image de l'accueil) le 09/09/2026. */}
+      <section className="relative overflow-hidden py-24 text-white sm:py-32">
+        <Image
+          src={galleryPhotos[0].src}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-forest-900/70" />
+        <div className="container-page relative">
           <p className="eyebrow text-terracotta-200">Bienvenue</p>
           <h1 className="h1 mt-2 text-white">{frontmatter.h1}</h1>
           <p className="mt-4 max-w-2xl text-lg text-forest-50">
@@ -54,6 +66,21 @@ export default function HomePage() {
         <div className="container-page mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {gites.map((gite) => (
             <GiteCard key={gite.slug} gite={gite} />
+          ))}
+        </div>
+
+        <div className="container-page mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {galleryPhotos.slice(3).map((photo) => (
+            <div key={photo.src} className="relative aspect-square overflow-hidden rounded-lg bg-vendee-100">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
+                className="h-full w-full object-cover"
+                sizes="(min-width: 640px) 25vw, 50vw"
+              />
+            </div>
           ))}
         </div>
       </section>

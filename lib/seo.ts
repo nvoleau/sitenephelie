@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { galleryPhotos } from "@/lib/data/site-images";
 import { siteConfig } from "@/lib/site-config";
+
+const defaultOgImage = galleryPhotos[0];
 
 type PageSeoInput = {
   title: string;
@@ -23,6 +26,7 @@ export function buildPageMetadata({ title, description, path }: PageSeoInput): M
       siteName: siteConfig.name,
       locale: "fr_FR",
       type: "website",
+      images: [{ url: defaultOgImage.src, width: defaultOgImage.width, height: defaultOgImage.height }],
     },
   };
 }

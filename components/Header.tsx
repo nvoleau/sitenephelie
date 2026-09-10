@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { logo } from "@/lib/data/site-images";
 import { siteConfig } from "@/lib/site-config";
 
 const navLinks = [
@@ -15,8 +17,9 @@ export default function Header() {
   return (
     <header className="border-b border-vendee-100 bg-white">
       <div className="container-page flex h-20 items-center justify-between">
-        <Link href="/" className="font-display text-2xl font-semibold text-forest-700">
-          {siteConfig.name}
+        <Link href="/" className="flex items-center gap-3">
+          <Image src={logo.src} alt="" width={44} height={44} className="h-11 w-11 rounded" priority />
+          <span className="font-display text-xl font-semibold text-forest-700">{siteConfig.name}</span>
         </Link>
         <nav aria-label="Navigation principale" className="hidden lg:block">
           <ul className="flex items-center gap-6 text-sm font-medium text-vendee-800">
