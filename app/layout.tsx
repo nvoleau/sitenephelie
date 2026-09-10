@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { galleryPhotos } from "@/lib/data/site-images";
-import { siteConfig } from "@/lib/site-config";
+import { sameAsLinks, siteConfig } from "@/lib/site-config";
 
 // Polices auto-hébergées via next/font (traite le point d'audit "chargement des
 // polices, ~160 ms" — pas de requête vers Google Fonts au runtime).
@@ -35,6 +35,7 @@ const lodgingBusinessJsonLd = {
     addressRegion: siteConfig.address.region,
     addressCountry: siteConfig.address.country,
   },
+  sameAs: sameAsLinks,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

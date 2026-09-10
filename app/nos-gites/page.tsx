@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import GiteCard from "@/components/GiteCard";
 import MdxContent from "@/components/MdxContent";
 import { gites, servicesInclusTousLesGites } from "@/lib/data/gites";
@@ -18,6 +19,12 @@ export const metadata: Metadata = buildPageMetadata({
 export default function NosGitesPage() {
   return (
     <div>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Accueil", path: "/" },
+          { name: "Nos gîtes", path: "/nos-gites/" },
+        ]}
+      />
       <div className="relative aspect-[21/9] w-full overflow-hidden bg-vendee-100">
         <Image
           src={nosGitesBanner.src}

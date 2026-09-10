@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import { getGiteBySlug, gites, servicesInclusTousLesGites } from "@/lib/data/gites";
 import { buildPageMetadata } from "@/lib/seo";
 import { addressLine } from "@/lib/site-config";
@@ -40,6 +41,13 @@ export default async function GitePage({
 
   return (
     <div className="container-page py-16">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Accueil", path: "/" },
+          { name: "Nos gîtes", path: "/nos-gites/" },
+          { name: gite.name, path: `/nos-gites/${gite.slug}/` },
+        ]}
+      />
       <Link href="/nos-gites/" className="text-sm font-semibold text-forest-700 hover:underline">
         ← Tous nos gîtes
       </Link>

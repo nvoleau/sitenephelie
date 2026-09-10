@@ -23,3 +23,4 @@ next-env.d.ts
 # sitemap (généré au build)
 /public/sitemap*.xml
 /public/robots.txt
+.gstack/

@@ -17,15 +17,24 @@ export const siteConfig = {
   phoneHref: "+33678552429",
   email: "contact@gites-nephelie.fr",
   whatsappHref: "https://wa.me/33678552429",
-  facebookHref: "https://www.facebook.com/",
+  // URL réelle relevée le 10/09/2026 sur la fiche Google Business Profile
+  // (l'ancienne valeur "https://www.facebook.com/" était un placeholder générique).
+  facebookHref: "https://www.facebook.com/people/Gites-N%C3%A9ph%C3%A9lie/61578778228599/",
+  // Lien stable vers la fiche Google Business Profile (CID relevé le 10/09/2026,
+  // fiche validée à 100% par Nicolas). Sert de référence externe (sameAs) et de
+  // lien direct vers les avis Google.
+  googleBusinessHref: "https://www.google.com/maps?cid=11139057569288891158",
   reviews: {
     count: 47,
     source: "Booking.com",
     label: "Excellent",
-    // Pas de note moyenne chiffrée disponible pour l'instant (voir échange du
-    // 09/09/2026 avec Nicolas) — ne pas inventer de ratingValue en schema.org
-    // tant que le chiffre exact n'est pas fourni.
+    // Pas de note moyenne chiffrée exacte confirmée par Nicolas pour l'instant —
+    // ne pas inventer de ratingValue en schema.org tant qu'il ne l'a pas validée
+    // (une valeur 8,9/10 sur 83 avis a été repérée sur Booking.com le 10/09/2026,
+    // mais ce chiffre est vivant et n'a pas été confirmé par Nicolas comme figeable).
   },
 } as const;
+
+export const sameAsLinks = [siteConfig.facebookHref, siteConfig.googleBusinessHref];
 
 export const addressLine = `${siteConfig.address.street}, ${siteConfig.address.postalCode} ${siteConfig.address.city}`;
