@@ -10,7 +10,7 @@ export const usp = [
   },
   {
     title: "Évasion garantie",
-    text: "À 2 minutes du Puy du Fou, partez explorer la nature et l'histoire vendéenne.",
+    text: "À 8 minutes du Puy du Fou, partez explorer la nature et l'histoire vendéenne.",
   },
   {
     title: "Séjour 100% autonome",

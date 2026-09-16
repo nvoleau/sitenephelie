@@ -5,7 +5,7 @@ export const siteConfig = {
   name: "Les Gîtes Néphélie",
   url: "https://gites-nephelie.fr",
   description:
-    "4 gîtes de 2 à 8 personnes à 2 minutes du Puy du Fou, aux Epesses en Vendée. Séjour 100% autonome, confort haut de gamme, livraison de produits locaux.",
+    "4 gîtes de 2 à 8 personnes à 8 minutes du Puy du Fou, aux Epesses en Vendée. Séjour 100% autonome, confort haut de gamme, livraison de produits locaux.",
   address: {
     street: "5 Rte de Saint-Michel Mont Mercure",
     postalCode: "85590",

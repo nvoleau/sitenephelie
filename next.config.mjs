@@ -13,6 +13,14 @@ const nextConfig = {
       // Doublon confirmé, non lié à la boutique — appliqué dès maintenant.
       { source: "/contact-2/", destination: "/contact/", permanent: true },
 
+      // URLs de fiches produit générées par WooCommerce, imprimées sur des QR codes
+      // physiques (voir Search Console : impressions réelles sur ces 2 URLs).
+      // La boutique étant hors périmètre de cette version, on redirige vers l'accueil
+      // plutôt que de laisser un 404 sur un support physique déjà distribué
+      // (décision Nicolas du 16/09/2026).
+      { source: "/shop/qrcode1759591590/", destination: "/", permanent: true },
+      { source: "/shop/qrcode1760102017/", destination: "/", permanent: true },
+
       // TODO (phase boutique) — à activer quand /boutique/, /mon-compte/, /panier/ et /checkout/
       // existeront réellement, sinon on redirige vers des pages inexistantes :
       // { source: "/la-boutique", destination: "/boutique", permanent: true },

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Jost, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -8,9 +8,21 @@ import { galleryPhotos } from "@/lib/data/site-images";
 import { sameAsLinks, siteConfig } from "@/lib/site-config";
 
 // Polices auto-hébergées via next/font (traite le point d'audit "chargement des
-// polices, ~160 ms" — pas de requête vers Google Fonts au runtime).
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
+// polices, ~160 ms" — pas de requête vers Google Fonts au runtime). Jost (sans)
+// + Cormorant Garamond (display) : système Néphélie, voir CLAUDE.md.
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-jost",
+  display: "swap",
+});
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -44,7 +56,7 @@ const lodgingBusinessJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="fr" className={`${jost.variable} ${cormorant.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <a href="#contenu-principal" className="skip-link">
           Aller au contenu principal

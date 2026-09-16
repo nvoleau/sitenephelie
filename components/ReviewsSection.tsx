@@ -16,18 +16,18 @@ export default function ReviewsSection() {
   }));
 
   return (
-    <section aria-labelledby="avis-heading" className="bg-vendee-50 py-16">
+    <section aria-labelledby="avis-heading" className="bg-paper-100 py-16">
       <div className="container-page">
         <p className="eyebrow">Avis clients</p>
         <h2 id="avis-heading" className="h2 mt-2">
           {siteConfig.reviews.label} — basé sur {siteConfig.reviews.count} avis {siteConfig.reviews.source}
         </h2>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {reviewsWithText.map((review) => (
-            <figure key={`${review.author}-${review.date}`} className="rounded-lg bg-white p-6 shadow-sm">
-              <blockquote className="text-sm text-vendee-800">“{review.text}”</blockquote>
-              <figcaption className="mt-4 text-sm font-semibold text-forest-700">
-                {review.author} <span className="font-normal text-vendee-500">— {review.date}</span>
+            <figure key={`${review.author}-${review.date}`} className="rounded-md border border-line bg-white p-6">
+              <blockquote className="text-body-sm text-ink-700">&ldquo;{review.text}&rdquo;</blockquote>
+              <figcaption className="mt-4 text-body-sm font-medium text-bocage-700">
+                {review.author} <span className="font-normal text-ink-500">— {review.date}</span>
               </figcaption>
             </figure>
           ))}

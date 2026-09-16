@@ -20,7 +20,7 @@ export default function SuperhoteWidget({
       loading="lazy"
       width="100%"
       height={1500}
-      className="w-full rounded-lg border border-vendee-100"
+      className="w-full rounded-md"
     />
   );
 }

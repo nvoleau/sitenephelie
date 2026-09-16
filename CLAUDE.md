@@ -95,12 +95,21 @@ Ne jamais changer les slugs des pages « cœur de cible » (`/`, `/nos-gites/`, 
 3. **CMS :** MDX versionné dans le code pour cette version (hors boutique). Voir `/content/*.mdx`.
 4. **PMS :** Superhote. Voir `lib/superhote.ts` et `components/SuperhoteWidget.tsx`.
 
+## Questions tranchées par Nicolas le 16/09/2026
+
+1. **Distance au Puy du Fou :** « 8 minutes ». Le handoff de design Néphélie (maquette hi-fi appliquée cette même date, voir `git log`) affichait « 8 minutes » alors que le dépôt et les meta SEO disaient jusqu'ici « 2 minutes » (valeur tranchée le 09/09/2026) — la description du projet en tête de ce fichier garde « 2 minutes » comme trace historique de cette ancienne décision, volontairement non modifiée. Nicolas a tranché en faveur de la nouvelle valeur « 8 minutes ». Appliqué dans `lib/site-config.ts`, `lib/data/usp.ts`, `lib/data/stats.ts`, `app/page.tsx`, `app/nos-gites/[slug]/page.tsx` et les fichiers `content/*.mdx` concernés (accueil, nos-gites, reserver, decouvrir-la-region, a-propos, contact, services).
+2. **Tarifs :** masqués entièrement pour cette version (`lib/pricing.ts`, `showPrices = false`) — aucun prix public n'existe encore dans le dépôt, voir « Questions encore ouvertes » point 5 ci-dessous.
+3. **Système visuel :** maquette hi-fi « Néphélie » appliquée (palette ink/paper/bocage/terre, polices Cormorant Garamond + Jost, remplace Fraunces/Inter). Tokens dans `tailwind.config.ts` et `app/globals.css`.
+
 ## Questions encore ouvertes (ne pas deviner)
 
 1. Export complet des 13 fiches produits WooCommerce (texte, prix, photos) — à fournir avant de construire la boutique (hors périmètre pour l'instant).
 2. Note moyenne chiffrée exacte des avis Booking.com (ex. 9,6/10) — Nicolas ne l'avait pas sous la main le 09/09/2026. Sans ce chiffre, le schema.org `Review` reste volontairement sans `reviewRating` (voir `lib/data/reviews.ts`) — ne pas en inventer un.
 3. ~~Vraies photos des gîtes~~ — récupérées le 09/09/2026 directement depuis `https://gites-nephelie.fr/` (accueil, `/nos-gites/`, `/a-propos/`) et stockées dans `public/images/site/` + `lib/data/site-images.ts`. Ce sont des photos génériques (terrasses/extérieurs), pas identifiées par lettre de gîte — l'ancien site ne les associe pas non plus à un gîte précis. L'attribution d'une photo à chaque fiche A/B/C/D dans `giteCardImage` est arbitraire (pour varier visuellement), pas une affirmation factuelle sur "la" photo de ce gîte. Si Nicolas fournit des photos identifiées par gîte, remplacer `lib/data/site-images.ts` en conséquence.
 4. Solution d'envoi du formulaire de contact (aucun backend/service tiers choisi) — `components/ContactForm.tsx` utilise un `mailto:` de secours en attendant un arbitrage.
+5. Tarifs par nuit des gîtes (aucun prix public confirmé) — voir `lib/pricing.ts` (`showPrices = false`). La maquette Néphélie affichait des « à partir de X € / nuit » d'exemple, volontairement omis partout dans le site tant que Nicolas ne fournit pas de vrais tarifs.
+6. Horaires d'arrivée/départ précis (ex. « arrivées de 16h à 20h ») — ne figurent dans aucune donnée du dépôt ; omis de la page Contact et du rail Réserver plutôt qu'inventés.
+7. « Ménage inclus » — mentionné dans la maquette Néphélie pour le rail de la fiche gîte mais absent de `lib/data/gites.ts` ; omis tant que non confirmé.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

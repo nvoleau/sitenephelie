@@ -14,7 +14,7 @@ export const metadata: Metadata = buildPageMetadata({
 export default function DecouvrirLaRegionPage() {
   return (
     <div className="container-page py-16">
-      <h1 className="h1">{frontmatter.h1}</h1>
+      <h1 className="display">{frontmatter.h1}</h1>
       <MdxContent source={content} />
     </div>
   );

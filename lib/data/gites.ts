@@ -9,6 +9,10 @@ export type Gite = {
   slug: string;
   name: string;
   capacity: number;
+  // Nombre de chambres — dérivé du premier élément de `characteristics`
+  // (ex. "2 chambres (...)"), gardé en champ à part pour l'affichage
+  // (récap du rail, mosaïque) sans reparser du texte libre.
+  chambres: number;
   idealFor: string;
   characteristics: string[];
   quote: string;
@@ -16,6 +20,7 @@ export type Gite = {
 
 const sixPersonnes = {
   capacity: 6,
+  chambres: 2,
   idealFor: "Un couple avec enfants",
   characteristics: [
     "2 chambres (1 lit double + 2 lits simples)",
@@ -35,6 +40,7 @@ export const gites: Gite[] = [
     slug: "gite-c",
     name: "Gîte C",
     capacity: 8,
+    chambres: 2,
     idealFor: "Les familles nombreuses ou deux couples",
     characteristics: [
       "2 chambres (2 lits doubles + 2 lits simples)",

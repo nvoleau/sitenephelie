@@ -79,9 +79,13 @@ export const aProposPhoto: SiteImage = {
   alt: "Intérieur d'un gîte Néphélie",
 };
 
+// Logo nettoyé le 16/09/2026 (voir CLAUDE.md, décisions du 16/09/2026) : le SVG
+// d'origine contenait un rectangle de fond plein (viewBox 0 0 2000 2000) qui
+// noyait le tracé dans un grand carré vide ; le viewBox est désormais recadré
+// sur le lettrage réel (790 805 420 390), d'où les nouvelles dimensions.
 export const logo: SiteImage = {
   src: "/images/site/logo.svg",
-  width: 2000,
-  height: 2000,
+  width: 420,
+  height: 390,
   alt: "Les Gîtes Néphélie",
 };
