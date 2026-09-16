@@ -10,7 +10,7 @@ import { usp } from "@/lib/data/usp";
 import { galleryPhotos } from "@/lib/data/site-images";
 import { getMdxSource } from "@/lib/mdx";
 import { buildPageMetadata } from "@/lib/seo";
-import { addressLine, siteConfig } from "@/lib/site-config";
+import { siteConfig } from "@/lib/site-config";
 
 const { frontmatter, content } = getMdxSource("accueil");
 
@@ -129,19 +129,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contact" className="py-16">
-        <div className="container-page">
-          <p className="eyebrow">Contact</p>
-          <h2 className="h2 mt-2">Contactez-nous</h2>
-          <address className="mt-4 space-y-2 text-vendee-800 not-italic">
-            <p>{addressLine}</p>
-            <p>
-              <a href={`tel:${siteConfig.phoneHref}`} className="hover:text-forest-700">{siteConfig.phone}</a>
-            </p>
-            <p>
-              <a href={`mailto:${siteConfig.email}`} className="hover:text-forest-700">{siteConfig.email}</a>
-            </p>
-          </address>
+      {/* Section de clôture : l'ancien bloc "Contactez-nous" (adresse/tél/email)
+          était redondant avec le footer qui affiche déjà ces 3 informations
+          juste en dessous, et la page se terminait sans appel à l'action —
+          voir /impeccable critique du 15/09/2026 (P1). Remplacé par une
+          relance claire vers la réservation, avec téléphone et WhatsApp pour
+          qui préfère un contact direct avant de réserver. Pas d'eyebrow ici :
+          un seul bloc de titre par page peut s'en passer pour casser la
+          répétition du motif eyebrow+titre présente ailleurs sur la page. */}
+      <section className="py-20">
+        <div className="container-page text-center">
+          <h2 className="h1">Prêt pour votre séjour au Puy du Fou ?</h2>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-vendee-700">
+            Réservez votre gîte dès maintenant, ou contactez-nous directement pour toute question sur votre séjour.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Link href="/reserver-un-logement/" className="btn-primary">
+              Réserver un logement
+            </Link>
+            <a href={`tel:${siteConfig.phoneHref}`} className="btn-outline">
+              {siteConfig.phone}
+            </a>
+            <a
+              href={siteConfig.whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline"
+            >
+              Discuter sur WhatsApp
+            </a>
+          </div>
         </div>
       </section>
     </>

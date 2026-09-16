@@ -14,38 +14,46 @@ body {
   @apply bg-white text-vendee-900 antialiased;
 }
 
-.skip-link {
-  @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-forest-700 focus:px-4 focus:py-2 focus:text-white;
-}
+/* Wrapped in @layer components so these rules are inserted at the
+   @tailwind components position, before utilities — otherwise their plain
+   source position after @tailwind utilities let them silently beat utility
+   overrides like text-white on the same element (equal specificity, later
+   in the cascade), which broke every "force this heading white on a dark
+   section" usage sitewide. */
+@layer components {
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-forest-700 focus:px-4 focus:py-2 focus:text-white;
+  }
 
-.container-page {
-  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
-}
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
 
-.btn {
-  @apply inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
-}
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+  }
 
-.btn-primary {
-  @apply btn bg-forest-700 text-white hover:bg-forest-800 focus-visible:outline-forest-700;
-}
+  .btn-primary {
+    @apply btn bg-forest-700 text-white hover:bg-forest-800 focus-visible:outline-forest-700;
+  }
 
-.btn-secondary {
-  @apply btn bg-terracotta-500 text-white hover:bg-terracotta-600 focus-visible:outline-terracotta-500;
-}
+  .btn-secondary {
+    @apply btn bg-terracotta-500 text-white hover:bg-terracotta-600 focus-visible:outline-terracotta-500;
+  }
 
-.btn-outline {
-  @apply btn border-2 border-forest-700 text-forest-700 hover:bg-forest-50 focus-visible:outline-forest-700;
-}
+  .btn-outline {
+    @apply btn border-2 border-forest-700 text-forest-700 hover:bg-forest-50 focus-visible:outline-forest-700;
+  }
 
-.h1 {
-  @apply font-display text-4xl font-semibold tracking-tight text-vendee-900 sm:text-5xl;
-}
+  .h1 {
+    @apply font-display text-4xl font-semibold tracking-tight text-vendee-900 sm:text-5xl;
+  }
 
-.h2 {
-  @apply font-display text-3xl font-semibold tracking-tight text-vendee-900;
-}
+  .h2 {
+    @apply font-display text-3xl font-semibold tracking-tight text-vendee-900;
+  }
 
-.eyebrow {
-  @apply text-sm font-semibold uppercase tracking-widest text-terracotta-500;
+  .eyebrow {
+    @apply text-sm font-semibold uppercase tracking-widest text-terracotta-500;
+  }
 }
