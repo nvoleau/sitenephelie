@@ -6,14 +6,16 @@ import JsonLd from "@/components/JsonLd";
 import MdxContent from "@/components/MdxContent";
 import { getGuideSlugs, getGuideSource } from "@/lib/mdx";
 import { cinescenieJsonLd } from "@/lib/jsonld/jsonld-cinescenie";
+import { giteClimatiseJsonLd } from "@/lib/jsonld/gite-climatise";
 import { buildPageMetadata } from "@/lib/seo";
 
-// JSON-LD par article — cinescenieJsonLd est spécifique à cet article précis
-// (headline, FAQ et @id lui appartiennent) : ne pas le rendre sur un autre
-// slug. Un futur 2e article de guide demandera son propre fichier lib/jsonld/
+// JSON-LD par article — chaque entrée est spécifique à un article précis
+// (headline, FAQ et @id lui appartiennent) : ne pas la rendre sur un autre
+// slug. Un nouvel article de guide demande son propre fichier lib/jsonld/
 // et sa propre entrée ici.
 const guideJsonLdBySlug: Record<string, Record<string, unknown>> = {
   "cinescenie-horaires-ou-dormir": cinescenieJsonLd,
+  "gite-climatise-puy-du-fou": giteClimatiseJsonLd,
 };
 
 export const dynamicParams = false;

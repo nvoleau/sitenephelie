@@ -23,7 +23,7 @@ Le site actuel contient des textes, des adresses, des caractéristiques de gîte
 - **CMS :** **MDX versionné dans le code — retenu par Nicolas le 09/09/2026** pour cette première version (contenu éditorial dans `/content/*.mdx`, données structurées répétées comme les gîtes/avis dans `/lib/data/*.ts`). Un CMS headless (Sanity/Contentful) pourra être ajouté plus tard si le volume d'édition l'exige — ne pas migrer sans nouvelle décision explicite de Nicolas.
 - **Boutique :** ne pas porter WooCommerce tel quel. Évaluer une solution e-commerce headless compatible Next.js (Shopify headless, Snipcart…) ou conserver WooCommerce sur un sous-domaine dédié avec un seul lien propre — voir cahier des charges section 5.3. **Hors périmètre de la version actuellement développée** (voir section « État d'avancement » plus bas).
 - **Réservation :** PMS retenu — **Superhote**. Intégration par iframe cross-origin fournie par Nicolas (`components/SuperhoteWidget.tsx`, ID dans `lib/superhote.ts`) : un seul widget, celui de recherche par dates (`/rentals-search`), sur `/reserver-un-logement/`. **Décision du 18/09/2026 :** le widget de liste + réservation (`/rentals`) a été retiré — constaté en test navigateur que le widget `/rentals-search` affiche déjà, dès le chargement (avant toute sélection de dates), la liste complète des 4 gîtes avec photos et prix, rendant le second widget entièrement redondant (mêmes photos, mêmes gîtes, mêmes prix affichés deux fois sur la page). `superhoteConfig.rentalsListUrl` reste dans `lib/superhote.ts` au cas où ce comportement du widget évoluerait côté Superhote, mais n'est plus utilisé dans le code. Cette iframe n'est pas rendue côté serveur — son contenu reste invisible pour Google, comme redouté plus bas pour les avis Booking. Mitigation appliquée : une liste des 4 gîtes en texte réel, rendue côté serveur, reste au-dessus du widget sur cette page pour garder du contenu indexable.
-- **Domaine :** `gites-nephelie.fr` conservé, DNS à repointer vers Vercel en fin de projet (jamais en cours de développement).
+- **Domaine :** `gites-nephelie.fr` conservé. **DNS déjà repointé vers Vercel (confirmé par Nicolas le 18/09/2026)** — donc plus « en fin de projet » comme prévu initialement, voir « Questions tranchées » du 18/09/2026 pour l'état exact et le problème de certificat en cours sur l'apex.
 
 ## État d'avancement (09/09/2026)
 
@@ -80,13 +80,32 @@ Ne jamais changer les slugs des pages « cœur de cible » (`/`, `/nos-gites/`, 
 - Nouvelle page ou section « Services » (barbecue, jeux de société, pétanque…) — reçoit un autre lien mort
 - `/mon-compte/`, `/panier/`, `/checkout/` — fonctionnels mais `noindex` et hors sitemap
 
+## Comment ajouter un article au Guide (`/guide/`)
+
+Section ajoutée le 18/09/2026, après les 2 premiers articles (`content/guide/cinescenie-horaires-ou-dormir.mdx`, `content/guide/gite-climatise-puy-du-fou.mdx`). Checklist à suivre, dans l'ordre :
+
+1. **Créer `content/guide/<slug>.mdx`.** Frontmatter attendu (type `GuideFrontmatter` dans `lib/mdx.ts`) : `title`, `description`, `slug`, `publishedAt`, `updatedAt`, `ogImage`, `keywords` (liste). **Différence avec les autres pages `content/*.mdx` : pas de champ `h1`** — le titre H1 s'écrit directement en `# ...` dans le corps du fichier. Markdown GFM activé (tableaux, listes de tâches...) via `remarkGfm` dans `components/MdxContent.tsx`.
+
+2. **Rien à coder côté route.** `app/guide/[slug]/page.tsx` construit `generateStaticParams()` à partir de `getGuideSlugs()` (`lib/mdx.ts`), qui scanne `content/guide/*.mdx` — un nouveau fichier y est automatiquement repris au prochain build (ou au redémarrage de `next dev`, voir point 7).
+
+3. **JSON-LD (recommandé pour le rich snippet Google, pas obligatoire pour que la page fonctionne).** Créer `lib/jsonld/<nom>.ts` avec `Article` + `FAQPage` + `BreadcrumbList`, assemblés via `buildGraph()` (voir `lib/jsonld/business.ts`). **Ne jamais redéfinir `LodgingBusiness` dans ce fichier** — toujours référencer `{ "@id": BUSINESS_ID }` importé de `business.ts` (sinon on retombe dans le doublon corrigé le 18/09/2026, voir plus bas). Chaque question du `FAQPage` doit avoir une réponse **visible et identique** dans le `.mdx` — sans ça Google rejette le rich snippet FAQ. Ensuite, enregistrer l'export dans `app/guide/[slug]/page.tsx` → objet `guideJsonLdBySlug`, avec le slug en clé. Sans entrée dans cette map, la page retombe sur un `BreadcrumbJsonLd` générique (pas de rich snippet Article/FAQ, juste le fil d'Ariane).
+
+4. **Image.** Poser le fichier réel à l'emplacement indiqué par `ogImage` dans `public/images/guide/`. Tant qu'il n'existe pas : l'image OG de la page (construite depuis `frontmatter.ogImage` dans `generateMetadata`) pointe vers un fichier qui 404 (pas bloquant, mais à corriger avant publication) ; et la carte de l'article sur `/guide/` utilise une photo de secours qui tourne dans la galerie commune (`fallbackCardImage()` dans `app/guide/page.tsx`, voir `lib/data/site-images.ts`) — pas une vraie photo de l'article.
+
+5. **Liens internes.** Ne jamais lier vers un article de guide qui n'existe pas encore — `getGuideSlugs()` ne le connaît pas, `dynamicParams = false` → 404 garanti. Retirer/neutraliser le lien jusqu'à publication de la cible (fait pour `/guide/ou-dormir-pres-du-puy-du-fou/`, article pas encore écrit).
+
+6. **Contenu : même règle absolue que le reste du site** (voir en tête de ce fichier). Chiffres et avis doivent venir de `lib/site-config.ts` / `lib/data/reviews.ts`, jamais inventés. Si un nouveau fait confirmé (équipement, etc.) doit aussi apparaître ailleurs sur le site, le répercuter à la source (ex. la climatisation confirmée le 18/09/2026 a été ajoutée à `lib/data/gites.ts`, pas seulement mentionnée dans l'article).
+
+7. **Avant de committer :** `npx tsc --noEmit`, puis `npx next build` (la sortie liste la nouvelle route sous `/guide/[slug]` avec le marqueur `●` SSG). Si le serveur `next dev` tournait déjà quand le `.mdx` a été ajouté, la nouvelle page peut 404 en dev tant qu'il n'est pas redémarré (le module qui lit `content/` via `fs.readFileSync` n'est pas toujours ré-évalué par le hot-reload de Turbopack) — redémarrer `npm run dev` règle ça. `npm run build` (donc aussi `next-sitemap`) inclut automatiquement la nouvelle route dans `public/sitemap-0.xml`, rien à configurer dans `next-sitemap.config.js`.
+
+8. **Rien à faire pour le rendre visible.** `/guide/` (`app/guide/page.tsx`) liste automatiquement tous les articles trouvés par `getGuideSlugs()`, triés par `publishedAt` décroissant.
+
 ## Convention de travail
 
 - Toujours vérifier le rendu Lighthouse mobile sur `Accueil`, `Nos Gîtes` et `Réserver` avant de considérer une étape terminée (voir critères de recette du cahier des charges, section 14).
 - Ne jamais committer de redirection sans l'avoir testée (code 301, destination correcte).
 - Toute donnée structurée schema.org doit être validée avec l'outil de test des résultats enrichis de Google avant merge.
-- Ne pas toucher aux enregistrements MX du domaine lors de la bascule DNS finale — uniquement les enregistrements A/CNAME du site (voir cahier des charges section 11.4).
-- La bascule DNS en production ne se fait qu'après validation explicite de Nicolas, un jour de faible trafic.
+- Ne pas toucher aux enregistrements MX du domaine — uniquement les enregistrements A/CNAME du site (voir cahier des charges section 11.4). Rappel valable même après bascule : ne pas retoucher les DNS sans validation explicite de Nicolas.
 
 ## Questions tranchées par Nicolas le 09/09/2026
 
@@ -100,6 +119,19 @@ Ne jamais changer les slugs des pages « cœur de cible » (`/`, `/nos-gites/`, 
 1. **Distance au Puy du Fou :** « 8 minutes ». Le handoff de design Néphélie (maquette hi-fi appliquée cette même date, voir `git log`) affichait « 8 minutes » alors que le dépôt et les meta SEO disaient jusqu'ici « 2 minutes » (valeur tranchée le 09/09/2026) — la description du projet en tête de ce fichier garde « 2 minutes » comme trace historique de cette ancienne décision, volontairement non modifiée. Nicolas a tranché en faveur de la nouvelle valeur « 8 minutes ». Appliqué dans `lib/site-config.ts`, `lib/data/usp.ts`, `lib/data/stats.ts`, `app/page.tsx`, `app/nos-gites/[slug]/page.tsx` et les fichiers `content/*.mdx` concernés (accueil, nos-gites, reserver, decouvrir-la-region, a-propos, contact, services).
 2. **Tarifs :** masqués entièrement pour cette version (`lib/pricing.ts`, `showPrices = false`) — aucun prix public n'existe encore dans le dépôt, voir « Questions encore ouvertes » point 5 ci-dessous.
 3. **Système visuel :** maquette hi-fi « Néphélie » appliquée (palette ink/paper/bocage/terre, polices Cormorant Garamond + Jost, remplace Fraunces/Inter). Tokens dans `tailwind.config.ts` et `app/globals.css`.
+
+## Questions tranchées par Nicolas le 18/09/2026
+
+1. **Bascule DNS :** déjà effectuée vers Vercel (contrairement à la règle initiale « jamais en cours de développement » — confirmé volontaire par Nicolas, pas un accident). `gites-nephelie.fr/guide/` répond déjà avec le contenu Next.js actuel du dépôt.
+2. **Widget Superhote sur `/reserver-un-logement/` :** un seul widget (recherche), voir décision documentée plus haut dans « Stack technique cible ».
+3. **Nombre d'avis Booking.com :** 88 (mis à jour depuis 47), confirmé par Nicolas. Appliqué dans `lib/site-config.ts` (`siteConfig.reviews.count`), source unique consommée par `lib/data/stats.ts` et `components/ReviewsSection.tsx`. La note moyenne chiffrée (`reviewRating`) reste non confirmée, voir « Questions encore ouvertes ».
+4. **Climatisation :** confirmée dans chaque chambre + le salon, sur les 4 gîtes. Ajoutée à `lib/data/gites.ts` (`characteristics`), remonte donc aussi sur les fiches `/nos-gites/gite-x/`. Cohérent avec `lib/jsonld/business.ts` qui l'avait déjà en `amenityFeature`.
+
+## Problème en cours (constaté le 18/09/2026, en cours de résolution)
+
+**Domaine canonique inversé dans Vercel par rapport au code et à l'ancien site.** Constaté dans le dashboard Vercel (projet `sitenephelie` → Domains) : `www.gites-nephelie.fr` est configuré en Production (primaire) et `gites-nephelie.fr` (apex) redirige vers lui en 308 — c'est l'inverse de `siteConfig.url = "https://gites-nephelie.fr"` (apex, sans www) utilisé partout dans le code (canonical, OG, JSON-LD, `next-sitemap.config.js`). L'ancien site WordPress utilisait aussi l'apex comme canonique (sitemap Yoast relevé le 09/09/2026 dans `CONTENU-SITE-ACTUEL.md` : `https://gites-nephelie.fr/sitemap_index.xml`, sans www).
+
+**Décision de Nicolas le 18/09/2026 :** corriger côté Vercel (apex en Production, www redirige vers l'apex) plutôt que de changer le code — préserve la continuité avec le sitemap historique. Action dans le dashboard Vercel, hors d'atteinte de Claude Code (pas d'accès). À vérifier une fois fait : `https://gites-nephelie.fr/` doit répondre en 200 avec un certificat valide, `https://www.gites-nephelie.fr/` doit rediriger en 308 vers l'apex.
 
 ## Questions encore ouvertes (ne pas deviner)
 
