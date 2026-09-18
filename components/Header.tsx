@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/reserver-un-logement/", label: "Réserver" },
   { href: "/decouvrir-la-region/", label: "Découvrir la région" },
   { href: "/services/", label: "Services" },
+  { href: "/guide/", label: "Guide" },
   { href: "/a-propos/", label: "À propos" },
   { href: "/contact/", label: "Contact" },
 ];
