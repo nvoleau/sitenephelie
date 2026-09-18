@@ -1,86 +1,37 @@
 /**
  * JSON-LD de la page /guide/cinescenie-horaires-ou-dormir/
  *
- * URLs, adresse, téléphone et email dérivés de siteConfig (lib/site-config.ts)
- * plutôt que codés en dur — même approche que lib/seo.ts, et exigée par
- * CLAUDE.md pour l'adresse (source unique, ne jamais la dupliquer).
- *
- * À RENSEIGNER avant mise en ligne :
- *   - geo.latitude / geo.longitude
- *   - petsAllowed
+ * L'entité LodgingBusiness vient de lib/jsonld/business.ts (source unique,
+ * référencée par @id) — ne pas la redéfinir ici. Migré le 18/09/2026 depuis
+ * un objet LodgingBusiness dupliqué à la main, même pattern que
+ * lib/jsonld/gite-climatise.ts.
  */
 
 import { siteConfig } from "@/lib/site-config";
+import { BUSINESS_ID, buildGraph } from "./business";
 
 const articleUrl = `${siteConfig.url}/guide/cinescenie-horaires-ou-dormir/`;
-const businessId = `${siteConfig.url}/#business`;
 
-export const cinescenieJsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Article",
-      "@id": `${articleUrl}#article`,
-      headline:
-        "Cinéscénie du Puy du Fou : horaires, fin du spectacle et où dormir juste à côté",
-      description:
-        "Horaires réels de la Cinéscénie, temps de sortie du parking et options d'hébergement à moins de 15 minutes du Puy du Fou.",
-      datePublished: "2026-10-01",
-      dateModified: "2026-10-01",
-      inLanguage: "fr-FR",
-      author: { "@type": "Organization", name: siteConfig.name },
-      publisher: { "@id": businessId },
-      mainEntityOfPage: articleUrl,
-    },
-    {
-      "@type": "LodgingBusiness",
-      "@id": businessId,
-      name: siteConfig.name,
-      url: `${siteConfig.url}/`,
-      telephone: siteConfig.phoneHref,
-      email: siteConfig.email,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: siteConfig.address.street,
-        addressLocality: siteConfig.address.city,
-        postalCode: siteConfig.address.postalCode,
-        addressRegion: "Pays de la Loire",
-        addressCountry: siteConfig.address.country,
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: "LAT_A_RENSEIGNER",
-        longitude: "LON_A_RENSEIGNER",
-      },
-      amenityFeature: [
-        {
-          "@type": "LocationFeatureSpecification",
-          name: "Climatisation",
-          value: true,
-        },
-        {
-          "@type": "LocationFeatureSpecification",
-          name: "Terrasse privative",
-          value: true,
-        },
-        {
-          "@type": "LocationFeatureSpecification",
-          name: "Barbecue",
-          value: true,
-        },
-        {
-          "@type": "LocationFeatureSpecification",
-          name: "Parking privatif gratuit",
-          value: true,
-        },
-      ],
-      numberOfRooms: 4,
-      petsAllowed: "A_RENSEIGNER",
-    },
-    {
-      "@type": "FAQPage",
-      "@id": `${articleUrl}#faq`,
-      mainEntity: [
+const article = {
+  "@type": "Article",
+  "@id": `${articleUrl}#article`,
+  headline:
+    "Cinéscénie du Puy du Fou : horaires, fin du spectacle et où dormir juste à côté",
+  description:
+    "Horaires réels de la Cinéscénie, temps de sortie du parking et options d'hébergement à moins de 15 minutes du Puy du Fou.",
+  datePublished: "2026-10-01",
+  dateModified: "2026-10-01",
+  inLanguage: "fr-FR",
+  author: { "@type": "Organization", name: siteConfig.name },
+  publisher: { "@id": BUSINESS_ID },
+  mainEntityOfPage: articleUrl,
+  about: { "@id": BUSINESS_ID },
+} as const;
+
+const faq = {
+  "@type": "FAQPage",
+  "@id": `${articleUrl}#faq`,
+  mainEntity: [
         {
           "@type": "Question",
           name: "À quelle heure se termine la Cinéscénie ?",
@@ -129,29 +80,30 @@ export const cinescenieJsonLd = {
             text: "Depuis Les Epesses, comptez une dizaine de minutes une fois sorti du parking. Plus vous vous éloignez, plus l'écart se creuse avec le temps annoncé par le GPS, à cause du flux de sortie simultané de 13 000 spectateurs.",
           },
         },
-      ],
+  ],
+} as const;
+
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Accueil",
+      item: `${siteConfig.url}/`,
     },
     {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Accueil",
-          item: `${siteConfig.url}/`,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Guide du séjour",
-          item: `${siteConfig.url}/guide/`,
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: "Cinéscénie : horaires et où dormir",
-        },
-      ],
+      "@type": "ListItem",
+      position: 2,
+      name: "Guide du séjour",
+      item: `${siteConfig.url}/guide/`,
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: "Cinéscénie : horaires et où dormir",
     },
   ],
 } as const;
+
+export const cinescenieJsonLd = buildGraph(article, faq, breadcrumb);

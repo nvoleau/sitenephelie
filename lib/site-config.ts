@@ -25,7 +25,8 @@ export const siteConfig = {
   // lien direct vers les avis Google.
   googleBusinessHref: "https://www.google.com/maps?cid=11139057569288891158",
   reviews: {
-    count: 47,
+    // 88 avis confirmé par Nicolas le 18/09/2026 (mise à jour depuis 47).
+    count: 88,
     source: "Booking.com",
     label: "Excellent",
     // Pas de note moyenne chiffrée exacte confirmée par Nicolas pour l'instant —
