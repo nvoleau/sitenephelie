@@ -22,7 +22,7 @@ Le site actuel contient des textes, des adresses, des caractéristiques de gîte
 - **Polices :** `next/font`, auto-hébergées (traite le point d'audit « chargement des polices, ~160 ms »).
 - **CMS :** **MDX versionné dans le code — retenu par Nicolas le 09/09/2026** pour cette première version (contenu éditorial dans `/content/*.mdx`, données structurées répétées comme les gîtes/avis dans `/lib/data/*.ts`). Un CMS headless (Sanity/Contentful) pourra être ajouté plus tard si le volume d'édition l'exige — ne pas migrer sans nouvelle décision explicite de Nicolas.
 - **Boutique :** ne pas porter WooCommerce tel quel. Évaluer une solution e-commerce headless compatible Next.js (Shopify headless, Snipcart…) ou conserver WooCommerce sur un sous-domaine dédié avec un seul lien propre — voir cahier des charges section 5.3. **Hors périmètre de la version actuellement développée** (voir section « État d'avancement » plus bas).
-- **Réservation :** PMS retenu — **Superhote**. Intégration par iframes cross-origin fournies par Nicolas (`components/SuperhoteWidget.tsx`, IDs dans `lib/superhote.ts`) : widget de recherche par dates (`/rentals-search`) et widget de liste + réservation (`/rentals`), tous deux sur `/reserver-un-logement/`. Ces iframes ne sont pas rendues côté serveur — leur contenu reste invisible pour Google, comme redouté plus bas pour les avis Booking. Mitigation appliquée : une liste des 4 gîtes en texte réel, rendue côté serveur, reste au-dessus des widgets sur cette page pour garder du contenu indexable.
+- **Réservation :** PMS retenu — **Superhote**. Intégration par iframe cross-origin fournie par Nicolas (`components/SuperhoteWidget.tsx`, ID dans `lib/superhote.ts`) : un seul widget, celui de recherche par dates (`/rentals-search`), sur `/reserver-un-logement/`. **Décision du 18/09/2026 :** le widget de liste + réservation (`/rentals`) a été retiré — constaté en test navigateur que le widget `/rentals-search` affiche déjà, dès le chargement (avant toute sélection de dates), la liste complète des 4 gîtes avec photos et prix, rendant le second widget entièrement redondant (mêmes photos, mêmes gîtes, mêmes prix affichés deux fois sur la page). `superhoteConfig.rentalsListUrl` reste dans `lib/superhote.ts` au cas où ce comportement du widget évoluerait côté Superhote, mais n'est plus utilisé dans le code. Cette iframe n'est pas rendue côté serveur — son contenu reste invisible pour Google, comme redouté plus bas pour les avis Booking. Mitigation appliquée : une liste des 4 gîtes en texte réel, rendue côté serveur, reste au-dessus du widget sur cette page pour garder du contenu indexable.
 - **Domaine :** `gites-nephelie.fr` conservé, DNS à repointer vers Vercel en fin de projet (jamais en cours de développement).
 
 ## État d'avancement (09/09/2026)
@@ -30,7 +30,7 @@ Le site actuel contient des textes, des adresses, des caractéristiques de gîte
 Première version du site codée, hors boutique (exclusion demandée explicitement par Nicolas pour cette itération). `npm run build` passe, toutes les pages listées ci-dessous sont en SSG, sitemap et redirection testés.
 
 **Construit :**
-- Pages : `/`, `/nos-gites/` (+ 4 fiches `/nos-gites/gite-a|b|c|d/`), `/reserver-un-logement/` (avec les 2 widgets Superhote), `/a-propos/`, `/contact/` (avec formulaire), `/decouvrir-la-region/` (nouvelle), `/services/` (nouvelle).
+- Pages : `/`, `/nos-gites/` (+ 4 fiches `/nos-gites/gite-a|b|c|d/`), `/reserver-un-logement/` (avec le widget Superhote de recherche/liste, voir décision du 18/09/2026 ci-dessous), `/a-propos/`, `/contact/` (avec formulaire), `/decouvrir-la-region/` (nouvelle), `/services/` (nouvelle).
 - Avis Booking rendus côté serveur avec JSON-LD `Review` (sans `reviewRating`, voir « Questions encore ouvertes »).
 - `trailingSlash: true` dans `next.config.mjs` pour préserver exactement les URLs historiques.
 - next-sitemap configuré et généré (11 URLs, 0 doublon), `robots.txt` généré.
@@ -72,7 +72,7 @@ Ne jamais changer les slugs des pages « cœur de cible » (`/`, `/nos-gites/`, 
 
 - `/` — Accueil
 - `/nos-gites/` — **4 fiches individuelles retenues** (Gîte A, B, C, D), décision de Nicolas du 09/09/2026 — meilleur pour le SEO local. Implémenté en route dynamique `app/nos-gites/[slug]/page.tsx` + `generateStaticParams` (SSG), données dans `lib/data/gites.ts`
-- `/reserver-un-logement/` — widgets de réservation Superhote (recherche + liste), implémenté
+- `/reserver-un-logement/` — widget de réservation Superhote (recherche, qui inclut déjà la liste des gîtes), implémenté
 - `/boutique/` — commande produits locaux
 - `/a-propos/`
 - `/contact/`
