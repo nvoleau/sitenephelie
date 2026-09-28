@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import Analytics from "@/components/Analytics";
+import CookieConsent from "@/components/CookieConsent";
 import { galleryPhotos } from "@/lib/data/site-images";
 import { sameAsLinks, siteConfig } from "@/lib/site-config";
 
@@ -67,7 +69,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer />
         <JsonLd data={lodgingBusinessJsonLd} />
+        <CookieConsent />
       </body>
+      <Analytics />
     </html>
   );
 }
