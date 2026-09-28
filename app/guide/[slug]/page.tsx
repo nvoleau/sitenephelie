@@ -7,6 +7,7 @@ import MdxContent from "@/components/MdxContent";
 import { getGuideSlugs, getGuideSource } from "@/lib/mdx";
 import { cinescenieJsonLd } from "@/lib/jsonld/jsonld-cinescenie";
 import { giteClimatiseJsonLd } from "@/lib/jsonld/gite-climatise";
+import { combienDeJoursJsonLd } from "@/lib/jsonld/combien-de-jours";
 import { buildPageMetadata } from "@/lib/seo";
 
 // JSON-LD par article — chaque entrée est spécifique à un article précis
@@ -16,6 +17,7 @@ import { buildPageMetadata } from "@/lib/seo";
 const guideJsonLdBySlug: Record<string, Record<string, unknown>> = {
   "cinescenie-horaires-ou-dormir": cinescenieJsonLd,
   "gite-climatise-puy-du-fou": giteClimatiseJsonLd,
+  "combien-de-jours-puy-du-fou": combienDeJoursJsonLd,
 };
 
 export const dynamicParams = false;
