@@ -7,10 +7,12 @@ import FeatureList from "@/components/amour/FeatureList";
 import PriceBlock from "@/components/amour/PriceBlock";
 import FaqBlock from "@/components/amour/FaqBlock";
 import CtaBand from "@/components/amour/CtaBand";
+import TrackedCta from "@/components/TrackedCta";
 import { amourAccueilFaqItems, amourAccueilJsonLd } from "@/lib/jsonld/amour-accueil";
 import { boudoirGite } from "@/lib/data/amour-boudoir";
 import { getMdxSource } from "@/lib/mdx";
 import { buildPageMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/site-config";
 import { amourImages } from "@/lib/data/amour-images";
 
 const { frontmatter, content } = getMdxSource("amour/accueil");
@@ -81,12 +83,25 @@ export default function SejourEnAmoureuxPage() {
           <PriceBlock />
         </div>
 
+        <p className="body-sm mt-6 text-paper/70">
+          Perdu·e dans les étapes de réservation ?{" "}
+          <TrackedCta
+            href={siteConfig.whatsappHref}
+            eventName="amour_whatsapp_click_accueil_inline"
+            external
+            className="text-or-300 underline underline-offset-2 hover:text-or-500"
+          >
+            Appelez-nous directement sur WhatsApp
+          </TrackedCta>
+          .
+        </p>
+
         <FaqBlock items={amourAccueilFaqItems} className="mt-16 max-w-2xl" />
       </div>
 
       <CtaBand
         title="Envie d'une parenthèse à deux ?"
-        text={`Réservez vos nuits sur notre moteur en ligne — sur le ${boudoirGite.name} si vous souhaitez l'option Le Boudoir, à sélectionner ensuite via le lien reçu par e-mail — ou écrivez-nous directement sur WhatsApp.`}
+        text={`Réservez vos nuits sur notre moteur en ligne — sur le ${boudoirGite.name} si vous souhaitez l'option Le Boudoir, à sélectionner ensuite via le lien reçu par e-mail. Perdu·e dans les étapes ? Appelez-nous directement sur WhatsApp.`}
         reserveEventName="amour_reserver_click_accueil_band"
         whatsappEventName="amour_whatsapp_click_accueil"
       />
