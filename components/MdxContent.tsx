@@ -40,18 +40,62 @@ const leadComponents = {
   p: (props: React.ComponentProps<"p">) => <p className="lead mt-4 max-w-xl" {...props} />,
 };
 
+// Variante pour la rubrique "Séjour en amoureux" (fond nuit/prune) — mêmes
+// classes composées (.h1/.h2/.lead...) mais couleurs claires, cf. convention
+// de surcharge documentée dans app/globals.css (@layer components avant
+// utilities, les classes text-* passées ici gagnent sur les couleurs par
+// défaut des classes composées).
+const bodyComponentsDark = {
+  h1: (props: React.ComponentProps<"h1">) => <h1 className="h1 mt-2 text-paper" {...props} />,
+  h2: (props: React.ComponentProps<"h2">) => <h2 className="h2 mt-10 text-paper" {...props} />,
+  h3: (props: React.ComponentProps<"h3">) => <h3 className="h3 mt-8 text-paper" {...props} />,
+  p: (props: React.ComponentProps<"p">) => <p className="mt-4 text-body leading-relaxed text-paper/80" {...props} />,
+  ul: (props: React.ComponentProps<"ul">) => <ul className="mt-4 divide-y divide-paper/10" {...props} />,
+  li: ({ children, ...props }: React.ComponentProps<"li">) => (
+    <li className="flex items-start gap-3 py-3 text-body-sm text-paper/85" {...props}>
+      <Check aria-hidden="true" size={15} className="mt-1 shrink-0 text-or-300" />
+      <span>{children}</span>
+    </li>
+  ),
+  a: (props: React.ComponentProps<"a">) => (
+    <a className="text-or-300 underline underline-offset-2 hover:text-or-500" {...props} />
+  ),
+  blockquote: (props: React.ComponentProps<"blockquote">) => (
+    <blockquote className="mt-6 rounded-md bg-paper/5 px-5 py-4 text-body-sm text-paper/80" {...props} />
+  ),
+  hr: (props: React.ComponentProps<"hr">) => <hr className="mt-10 border-paper/10" {...props} />,
+  table: (props: React.ComponentProps<"table">) => (
+    <div className="mt-6 overflow-x-auto">
+      <table className="w-full border-collapse text-body-sm" {...props} />
+    </div>
+  ),
+  thead: (props: React.ComponentProps<"thead">) => (
+    <thead className="border-b border-paper/20 text-left text-paper" {...props} />
+  ),
+  th: (props: React.ComponentProps<"th">) => <th className="px-3 py-2 font-medium" {...props} />,
+  td: (props: React.ComponentProps<"td">) => (
+    <td className="border-b border-paper/10 px-3 py-2 text-paper/80" {...props} />
+  ),
+};
+
+const componentsByVariant = {
+  body: bodyComponents,
+  lead: leadComponents,
+  dark: bodyComponentsDark,
+};
+
 export default function MdxContent({
   source,
   variant = "body",
 }: {
   source: string;
-  variant?: "lead" | "body";
+  variant?: "lead" | "body" | "dark";
 }) {
   return (
     <div className="max-w-3xl">
       <MDXRemote
         source={source}
-        components={variant === "lead" ? leadComponents : bodyComponents}
+        components={componentsByVariant[variant]}
         options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
       />
     </div>

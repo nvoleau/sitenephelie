@@ -39,6 +39,18 @@ const config: Config = {
         },
         or: {
           500: "#B79256",
+          300: "#D4B881",
+        },
+        // Sous-thème "Séjour en amoureux" (app/sejour-en-amoureux/) — additif,
+        // n'affecte aucune page existante. `or.500`/`or.300` ci-dessus sont
+        // réutilisés comme accent doré de ce sous-thème.
+        nuit: {
+          900: "#14101A",
+          800: "#1C1522",
+        },
+        prune: {
+          800: "#3B1220",
+          600: "#5C1A2B",
         },
         line: {
           DEFAULT: "#DCD4C4",
