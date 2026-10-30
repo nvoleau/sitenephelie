@@ -1,14 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Phone } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { logo } from "@/lib/data/site-images";
 import { siteConfig } from "@/lib/site-config";
 
 const navLinks = [
-  { href: "/", label: "Accueil" },
   { href: "/nos-gites/", label: "Nos gîtes" },
   { href: "/reserver-un-logement/", label: "Réserver" },
   { href: "/decouvrir-la-region/", label: "Découvrir la région" },
@@ -27,11 +27,12 @@ function isActive(pathname: string, href: string) {
 
 export default function Header() {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur">
       <div className="container-page flex h-[76px] items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3" onClick={() => setIsMenuOpen(false)}>
           <Image src={logo.src} alt="" width={44} height={44} className="h-9 w-9" priority />
           <span className="font-display text-h3 text-ink-900">{siteConfig.name}</span>
         </Link>
@@ -55,27 +56,64 @@ export default function Header() {
             })}
           </ul>
         </nav>
-        <div className="hidden items-center gap-5 sm:flex">
-          <a href={`tel:${siteConfig.phoneHref}`} className="flex items-center gap-2 text-body-sm text-ink-700 hover:text-bocage-700">
-            <Phone aria-hidden="true" size={16} className="text-ink-500" />
+        <div className="hidden shrink-0 items-center gap-5 lg:flex">
+          <a
+            href={`tel:${siteConfig.phoneHref}`}
+            className="flex shrink-0 items-center gap-2 whitespace-nowrap text-body-sm text-ink-700 hover:text-bocage-700"
+          >
+            <Phone aria-hidden="true" size={16} className="shrink-0 text-ink-500" />
             {siteConfig.phone}
           </a>
-          <Link href="/reserver-un-logement/" className="btn-primary">
+          <Link href="/reserver-un-logement/" className="shrink-0 btn-primary">
             Réserver
           </Link>
         </div>
+
+        {/* Déclencheur du menu burger — téléphone et tablette (< lg), là où
+            la nav complète et le bloc téléphone/Réserver ci-dessus sont
+            masqués. */}
+        <button
+          type="button"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
+          aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          className="flex items-center justify-center p-2 text-ink-700 hover:text-bocage-700 lg:hidden"
+        >
+          {isMenuOpen ? <X aria-hidden="true" size={24} /> : <Menu aria-hidden="true" size={24} />}
+        </button>
       </div>
-      <nav aria-label="Navigation principale mobile" className="border-t border-line lg:hidden">
-        <ul className="container-page flex flex-wrap gap-x-4 gap-y-2 py-3 text-body-sm text-ink-700">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <Link href={link.href} className="transition-colors duration-120 ease-standard hover:text-bocage-700">
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+
+      {isMenuOpen && (
+        <nav id="mobile-menu" aria-label="Navigation principale mobile" className="border-t border-line lg:hidden">
+          <ul className="container-page flex flex-col py-2 text-body-sm text-ink-700">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block py-2.5 transition-colors duration-120 ease-standard hover:text-bocage-700"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="container-page flex flex-col gap-3 border-t border-line-soft py-4">
+            <a
+              href={`tel:${siteConfig.phoneHref}`}
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center gap-2 text-body-sm text-ink-700 hover:text-bocage-700"
+            >
+              <Phone aria-hidden="true" size={16} className="shrink-0 text-ink-500" />
+              {siteConfig.phone}
+            </a>
+            <Link href="/reserver-un-logement/" onClick={() => setIsMenuOpen(false)} className="btn-primary">
+              Réserver
+            </Link>
+          </div>
+        </nav>
+      )}
     </header>
   );
 }
