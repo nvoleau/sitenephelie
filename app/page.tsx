@@ -100,6 +100,24 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Teaser vers la rubrique "Séjour en amoureux" — palette nuit/prune/or
+          distincte du reste du site pour signaler la sous-identité dès le
+          clic, avant même d'arriver sur /sejour-en-amoureux/. */}
+      <section className="bg-nuit-900 py-16 text-paper">
+        <div className="container-page">
+          <p className="eyebrow text-or-300">Hors saison</p>
+          <h2 className="h2 mt-2 text-paper">Un séjour en amoureux, rien que pour vous deux</h2>
+          <p className="lead mt-4 max-w-xl text-paper/80">
+            Hors saison du Puy du Fou, nous ouvrons aussi nos gîtes aux couples : un logement entièrement privatisé,
+            et une option pour prolonger l&rsquo;instant.
+          </p>
+          <Link href="/sejour-en-amoureux/" className="btn mt-8 inline-flex bg-or-500 text-nuit-900 hover:bg-or-300">
+            Découvrir le séjour en amoureux
+            <ArrowRight aria-hidden="true" size={16} />
+          </Link>
+        </div>
+      </section>
+
       <section className="py-16">
         <div className="container-page grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {usp.map((item) => (
