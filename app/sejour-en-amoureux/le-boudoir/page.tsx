@@ -55,7 +55,6 @@ export default function LeBoudoirPage() {
           eyebrow="Option Le Boudoir"
           title={frontmatter.h1}
           lead="Une chambre transformée, le temps d'un séjour, pour prolonger l'instant à deux. Réservez vos nuits sur le Gîte A, puis sélectionnez l'option via le lien reçu par e-mail."
-          image={amourImages.boudoirDetail}
           primaryCta={{
             href: "/reserver-un-logement/",
             label: "Réserver mes nuits sur le Gîte A",
